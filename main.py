@@ -12,7 +12,7 @@ from pydantic import Field
 #FastAPI
 from fastapi import FastAPI
 from fastapi import status
-from fastapi import Body
+from fastapi import Body, Form
 
 app = FastAPI()
 
@@ -41,7 +41,7 @@ class User(UserBase):
         max_length=50
 
     )
-    birth_date: Optional[date] = Field(default=None)
+    birth_date: Optional[date] = Field(default="")
 
 class UserRegister(User):
      password: str = Field(
@@ -60,6 +60,10 @@ class Tweet(BaseModel):
     created_at: datetime = Field(default=datetime.now())
     updated_at: Optional[datetime] = Field(default=None)
     by: User = Field(...)
+
+class LoginOut(BaseModel): 
+    email: EmailStr = Field(...)
+    message: str = Field(default="Login Successfully!")
 
 #Path Operations
 
@@ -103,14 +107,13 @@ def singup(user: UserRegister = Body(...)):
 ### Login a User
 @app.post(
     path="/login",
-    response_model=User,
+    response_model=LoginOut,
     status_code=status.HTTP_200_OK,
     summary="Login a User",
     tags=["Users"]
 )
-def login():
+def login( 
     pass
-
 ### Show all User
 @app.get(
     path="/users",
@@ -186,7 +189,22 @@ def delete_a_user():
     tags=["Tweets"]
     )
 def home():
-    return{"Twitter API": "Working"}
+    """
+    this path operation shows all tweets in the app
+
+    Parameters: 
+        -
+    
+    Return a json list with all twets in the app, with the following keys:
+        - tweet_id: UUID
+        - content: str
+        - created_at: datetime
+        - updated_at: Optional[datetime]
+        - by: User
+    """
+    with open("tweets.json", "r", encoding="utf-8") as f:
+        results = json.loads(f.read())
+        return results
 
 ### Post a tweet
 @app.post(

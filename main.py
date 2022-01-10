@@ -113,7 +113,29 @@ def singup(user: UserRegister = Body(...)):
     tags=["Users"]
 )
 def login( 
-    pass
+        email: EmailStr = Body(...),
+        password: str = Body(...),
+    ):
+    """
+    Login
+
+    This path operation login a Person in the app
+
+    Parameters:
+    - Request body parameters:
+        - email: EmailStr
+        - password: str
+
+    Returns a LoginOut model with username and message
+    """
+    with open("users.json", "r+", encoding="utf-8") as f: 
+        datos = json.loads(f.read())
+        for user in datos:
+            if email == user['email'] and password == user['password']:
+                return LoginOut(email=email, message="Login Successfully!")
+            else:
+                return LoginOut(email=email, message="Login Unsuccessfully!")
+    
 ### Show all User
 @app.get(
     path="/users",

@@ -185,8 +185,6 @@ def show_a_user():
 def delete_a_user():
     pass
 
-
-
 ### Update a User
 @app.put(
     path="/user/{user_id}/update",

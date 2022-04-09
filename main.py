@@ -5,7 +5,7 @@ from datetime import date
 from datetime import datetime
 from typing import Optional, List
 
-#Pydontic
+#Pydantic
 from pydantic import BaseModel
 from pydantic import EmailStr
 from pydantic import Field
